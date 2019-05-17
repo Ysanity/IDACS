@@ -1,0 +1,44 @@
+#include <ESP8266WiFi.h>
+int status = WL_IDLE_STATUS;
+WiFiClient client;
+const int BedPin=5;
+const int DeskPin=16;
+const char* URL_BED="http://192.168.4.1/InRoom2";
+const char* URL_DESK="";
+const char* URL_OUT="";
+
+const char* ssid = "XuanCaiDeAP";
+const char* password = "12345678";
+
+
+
+void setup()
+{
+  Serial.begin(115200);
+  Serial.println();
+  Serial.printf("Connecting to %s ", ssid);
+  WiFi.begin(ssid, password);
+  while (WiFi.status() != WL_CONNECTED)
+  {
+    delay(500);
+    Serial.print(".");
+  }
+  Serial.println(" connected");
+  
+}
+  
+void loop(){
+    if(digitalRead(BedPin)==0){
+    client.connect(URL_BED, 80);
+    Serial.println("ONBED.");
+  }
+  else if(digitalRead(DeskPin)==1){
+    client.connect(URL_DESK, 80);
+    Serial.println("ONDESK.");
+  }
+  else {
+    client.connect(URL_OUT, 80);
+    Serial.println("OUT.");
+  }
+  
+}
